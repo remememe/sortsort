@@ -1,0 +1,36 @@
+[package]
+name = "sortsort"
+version = "0.1.0"
+edition = "2024"
+description = "CLI sorting algorithm visualizer"
+license = "MIT"
+repository = "https://github.com/remememe/sortsort"
+authors = ["remememe"]
+keywords = ["cli","tui","sorting","visualization","algorithms"]
+
+[lib]
+name = "sortsort"
+path = "src/lib.rs"
+
+[[bin]]
+name = "sortsort"
+path = "src/main.rs"
+
+[dependencies]
+rand = { version = "0.10.1" , features = ["thread_rng"] }
+clap = { version = "4.6.1" , features = ["derive"] }
+ratatui = "0.30.0"
+crossterm = "0.29.0"
+ratatui-core = "0.1.0"
+
+[profile.dev]
+opt-level = 0            
+lto = false
+codegen-units = 16
+
+[profile.release]
+opt-level = 3               
+overflow-checks = false 
+lto = true
+panic = "abort"
+codegen-units = 1
