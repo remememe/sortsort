@@ -5,6 +5,7 @@ edition = "2024"
 description = "CLI sorting algorithm visualizer"
 license = "MIT"
 repository = "https://github.com/remememe/sortsort"
+readme = "README.md"
 authors = ["remememe"]
 keywords = ["cli","tui","sorting","visualization","algorithms"]
 
