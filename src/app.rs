@@ -1,7 +1,7 @@
 use std::fmt;
 use std::{time::{Duration, Instant}};
 use clap::ValueEnum;
-use crate::{algorithms::{bogo::BogoState, bubble::{self, BubbleState}, cocktail_shaker::CocktailState, gnome::GnomeState, insertion::InsertionState, odd_even::OddEvenState, quick::{self, QuickState}, selection::SelectionState, shell::ShellState}};
+use crate::{algorithms::{bogo::BogoState, bubble::{self, BubbleState}, cocktail_shaker::CocktailState, gnome::GnomeState, insertion::InsertionState, odd_even::OddEvenState, quick::{self, QuickState}, selection::SelectionState, shell::ShellState, merge::MergeState}};
 use crate::algorithms::Stepper;
 use rand::{RngExt, seq::IndexedRandom};
 use crossterm::event::{self, KeyCode};
@@ -32,6 +32,7 @@ pub enum SortingAlgorithm {
     Gnome,
     Insertion,
     Shell,
+    Merge,
     Bogo,
     Random,
 }
@@ -45,6 +46,7 @@ enum AlgorithmState
     Gnome(GnomeState),
     Insertion(InsertionState),
     Shell(ShellState),
+    Merge(MergeState),
     Bogo(BogoState),
 }
 impl fmt::Display for SortingAlgorithm
@@ -64,6 +66,7 @@ impl AlgorithmState {
             AlgorithmState::Gnome(_) => "Gnome Sort",
             AlgorithmState::Insertion(_) => "Insertion Sort",
             AlgorithmState::Shell(_) => "Shell Sort",
+            AlgorithmState::Merge(_) => "Merge Sort",
             AlgorithmState::Bogo(_) => "Bogo Sort",
         }
     }
@@ -77,6 +80,7 @@ impl AlgorithmState {
             AlgorithmState::Gnome(state) => state.step(bars),
             AlgorithmState::Insertion(state) => state.step(bars),
             AlgorithmState::Shell(state) => state.step(bars),
+            AlgorithmState::Merge(state) => state.step(bars),
             AlgorithmState::Bogo(state) => state.step(bars),
         }
     }
@@ -127,11 +131,14 @@ impl App {
             SortingAlgorithm::Shell => AlgorithmState::Shell(
                 ShellState::new(amount)
             ),
+            SortingAlgorithm::Merge => AlgorithmState::Merge(
+                MergeState::new(amount)
+            ),
             SortingAlgorithm::Bogo => AlgorithmState::Bogo(
                 BogoState::new()
             ),
             SortingAlgorithm::Random => {
-                let vs = vec![SortingAlgorithm::Quick,SortingAlgorithm::Bubble,SortingAlgorithm::Cocktail,SortingAlgorithm::Selection,SortingAlgorithm::OddEven,SortingAlgorithm::Gnome,SortingAlgorithm::Insertion,SortingAlgorithm::Shell];
+                let vs = vec![SortingAlgorithm::Quick, SortingAlgorithm::Bubble, SortingAlgorithm::Cocktail, SortingAlgorithm::Selection, SortingAlgorithm::OddEven, SortingAlgorithm::Gnome, SortingAlgorithm::Insertion, SortingAlgorithm::Shell, SortingAlgorithm::Merge];
                 match vs.choose(&mut rand::rng()) {
                     Some(i) =>  Self::get_algorithm(i, amount),
                     None    => Self::get_algorithm(&SortingAlgorithm::Quick, amount),

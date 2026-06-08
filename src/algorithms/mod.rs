@@ -6,6 +6,7 @@ pub mod odd_even;
 pub mod gnome;
 pub mod insertion;
 pub mod shell;
+pub mod merge;
 pub mod bogo;
 
 use crate::app::{Bar};
